@@ -1,9 +1,22 @@
 @()
 
 @main("Welcome to Play") {
-  <h1>Welcome to Play with SASS and ES6 Modules!</h1>
 
-  <a id="modalTrigger" href="#nothing" class="btn btn-lg btn-success">Display modal</a>
+  <div class="container pt-5">
+    <div class="jumbotron">
+      <h1 class="display-3">Welcome to Play with SASS and ES6 Modules!</h1>
+      <p class="lead">The sole intention of this is to provide a pretty straight forward way to use current frontend-technologies
+        (<a href="https://yarnpkg.com">Yarn</a>, <a href="https://gulpjs.com/">Gulp</a>,
+        <a href="https://webpack.js.org/">Webpack</a> and <a href="http://sass-lang.com/">SASS</a>) together with a
+        <a href="https://www.playframework.com">Play Framework</a> web application.</p>
+      <hr class="my-4">
+      <p class="lead">
+        <a id="modalTrigger" href="#nothing" class="btn btn-lg btn-success">
+          <i class="fa fa-eye fa-fw" aria-hidden="true"></i>Display a modal window...
+        </a>
+      </p>
+    </div>
+  </div>
 
   <div id="exampleModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
