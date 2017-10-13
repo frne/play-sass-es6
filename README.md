@@ -1,10 +1,32 @@
 A Modern Frontend-Setup for Play with SCSS and ES6
 ==================================================
 
-**The sole intention of this is to provide a pretty straight forward way to use current frontend-technologies (
-[Yarn](https://yarnpkg.com), [Gulp](https://gulpjs.com/), 
+**The sole intention of this is to provide a pretty straight forward way to use current frontend-technologies 
+([Yarn](https://yarnpkg.com), [Gulp](https://gulpjs.com/), 
 [Webpack](https://webpack.js.org/) and [SASS](http://sass-lang.com/)) together with a 
 [Play Framework](https://www.playframework.com) web application.**
+
+TL;DR
+-----
+
+If you are already familiar with the technologies above, feel free to just checkout the project:
+
+```bahs
+git clone git@github.com:frne/play-sass-es6.git
+cd play-sass-es6
+
+# build assets
+cd static && gulp && cd -
+
+# run play application
+sbt frontend/run
+```
+
+The repo contains an SBT multi-project build with a standard Play 2.6 (Scala) webapplication in module `webapp`. The 
+`static` directory contains the SASS and JavaScript (ES6) sources and a Gulp / Webpack build pipeline writing the assets 
+into Play's `public/managed` asset directory. The Play application uses sbt-web for caching and delivery of the assets.
+
+*Note: If errors occure during execution of the above commands, keep reading...*
 
 Prerequisites
 -------------

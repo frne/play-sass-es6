@@ -43,7 +43,8 @@ gulp.task('js', ['clean'], function () {
                 $: 'jquery',
                 jQuery: 'jquery',
                 'window.jQuery': 'jquery',
-                Tether: 'tether'
+                Tether: 'tether',
+                Popper: 'popper.js'
             })
         ],
         stats: {
