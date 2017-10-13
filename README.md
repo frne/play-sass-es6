@@ -444,6 +444,31 @@ Content-Type: application/javascript; charset=UTF-8
 Content-Length: 49756
 ```
 
+Further Reading / Sources
+-------------------------
+
+**Play**
+
+* https://www.playframework.com/documentation/2.6.x/AssetsOverview
+* https://github.com/sbt/sbt-web
+* https://github.com/sbt/sbt-digest#sbt-digest
+* https://github.com/sbt/sbt-gzip#sbt-gzip
+* https://www.jamesward.com/2014/04/29/optimizing-static-asset-loading-with-play-framework
+
+**Gulp**
+
+* https://gulpjs.com/
+* https://www.npmjs.com/package/gulp-sass
+* https://www.npmjs.com/package/webpack-stream
+* https://www.npmjs.com/package/gulp-image
+
+**Webpack**
+
+* https://webpack.js.org/guides/getting-started/
+* http://ccoenraets.github.io/es6-tutorial/setup-webpack/
+* http://2ality.com/2015/04/webpack-es6.html
+
+
 Misc
 ----
 
