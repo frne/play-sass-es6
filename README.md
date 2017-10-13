@@ -1,9 +1,9 @@
 A Modern Frontend-Setup for Play with SASS and ES6
 ==================================================
 
-**The sole intention of this is to provide a pretty straight forward way to use current frontend-technologies 
-([Yarn](https://yarnpkg.com), [Gulp](https://gulpjs.com/), 
-[Webpack](https://webpack.js.org/) and [SASS](http://sass-lang.com/)) together with a 
+**This example provides a pretty straight forward way to integrate a contemporary frontend-technology stack 
+([Yarn](https://yarnpkg.com), [Gulp](https://gulpjs.com/), [SASS](http://sass-lang.com/) and
+[Webpack2](https://webpack.js.org/) with [ScmaScript 6](https://www.ecma-international.org/ecma-262/6.0/)) together with a 
 [Play Framework](https://www.playframework.com) web application.**
 
 TL;DR
@@ -22,9 +22,10 @@ cd static && gulp && cd -
 sbt frontend/run
 ```
 
-The repo contains an SBT multi-project build with a standard Play 2.6 (Scala) webapplication in module `webapp`. The 
-`static` directory contains the SASS and JavaScript (ES6) sources and a Gulp / Webpack build pipeline writing the assets 
-into Play's `public/managed` asset directory. The Play application uses sbt-web for caching and delivery of the assets.
+The repo contains an SBT multi-project build with a standard Play 2.6 (Scala) web application in module 
+[webapp/](webapp/). The [static/](static/) directory contains the SASS and JavaScript (ES6) sources and a Gulp / Webpack 
+build pipeline writing the assets into Play's `public/managed` asset directory. The Play application uses 
+[sbt-web](https://github.com/sbt/sbt-web) for caching and delivery of the assets.
 
 *Note: If errors occure during execution of the above commands, keep reading...*
 
@@ -33,12 +34,12 @@ Prerequisites
 
 ### Environment
 
-To build the Application and frontend assets, 
+To build the application and frontend assets, 
 [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html), 
-[SBT](http://www.scala-sbt.org/) and [NodeJs](https://nodejs.org/en/) is needed. Please refere to the installations 
+[SBT](http://www.scala-sbt.org/) and [NodeJs](https://nodejs.org/en/) are needed. Please refer to the installation 
 instructions on the webpages to get them running.
 
-*Note: The example was built and tested on `Ubuntu Linux 16.4` with `OpenJDK 1.8.0_131`, `SBT 1.0.2` on `Scala 2.12.3` 
+*Note: This example was built and tested on `Ubuntu Linux 16.4` with `OpenJDK 1.8.0_131`, `SBT 1.0.2` on `Scala 2.12.3` 
 and `NodeJs v6.11.4`.*
 
 ### Frontend Tools
@@ -60,15 +61,15 @@ Project Setup
 
 ### Play Framework
 
-To start off, a new Play Project needs to be created. The Play 
+To start off, a new Play project needs to be created. The 
 [documentation](https://www.playframework.com/documentation/2.6.x/NewApplication#Creating-a-new-application) 
-provides an easy way to do that using [giter8 templates](). In this example, the Play Scala Seed 2.6.x is used:
+provides an easy way to do that using [giter8 templates](). In this example, the `Play Scala Seed 2.6.x`  is used:
 
 ```bash
 sbt new playframework/play-scala-seed.g8
 ```
 
-*Side note: The setup is tested with the Scala seed, but one should be able to use the Java seed as well.*
+*Note: This example is based on the Scala seed, but should work for Java as well.*
 
 As an optional step, I would recommend to setup Play as an SBT 
 [multi-project build](http://www.scala-sbt.org/0.13/docs/Multi-Project.html). This helps to keep the project structure 
@@ -159,14 +160,15 @@ yarn add --dev gulp gulp-clean gulp-sass gulp-postcss gulp-uglify autoprefixer c
 yarn add bootstrap@4 popper.js font-awesome jquery
 ```
 
-The tools installed with `--dev` are used to build the assets. The other libs on the second line are frontend libs used 
-in the example. Yarn can install every nodejs package, so feel free to add / remove some. Also a file called `yarn.lock`
-has beed added. THis is used to keep track of installed libs / versions and should never be changed manually.
+The tools installed with `--dev` are used to build the assets. The other libs on the second line are frontend 
+dependencies used in the example. Yarn can install every nodejs package, so feel free to add / remove some. Also a file 
+called `yarn.lock` has beed added. This is used to keep track of installed libs / versions and should never be changed 
+manually.
 
-### Gulp / Webpack build
+### Gulp / Webpack Build
 
-To get production-ready JS- and CSS-files, a Gulp build pipeline is used. Create a file called `Gulpfile.js` in the 
-`static` directory and add the following contents:
+To get compiled JS- and CSS-files, a Gulp build pipeline is used. Create a file called `Gulpfile.js` in the `static` 
+directory and add the following contents:
 
 ```javascript
 'use strict';
@@ -249,7 +251,7 @@ additional configuration should be made for production use and development conve
 
 ### JavaScript
 
-For prod, minified (`*.min.js`) files should be produces. Add the following task to the Gulp build:
+For prod, minified (`*.min.js`) files should be produced. Add the following to the Gulp build:
 
 ```javascript
 // add dependencies
@@ -269,8 +271,9 @@ gulp.task('jsProd', ['js'], function () {
 ```
 ### SASS
 
-The generated CSS files should also be compressed and for better browser-support autoprefixed. The PostCss library is 
-used to make general CSS optimizations after compile. Add / modify the following in Gulp build:
+The generated CSS files should also be compressed and for better browser-support autoprefixed. The 
+[PostCss](https://github.com/postcss/postcss#postcss---) library is used to make general CSS optimizations after 
+compile. Add / modify the following in Gulp build:
 
 ```javascript
 // add dependencies
@@ -347,7 +350,7 @@ gulp.task('clean', function () {
 This provides a `gulp dist` task, which is used to build all production assets, and a `gulp watch` task, which will 
 recompile assets when they are changed. The latter is very convenient for development.
 
-The `gulp-clean` task removed generated files from dist directory.
+The `gulp-clean` task removes generated files from dist directory.
 
 Play Application Setup
 ----------------------
@@ -374,8 +377,8 @@ Play already delivers the JS/CSS files, if they are included in a template:
 </html>
 ```
 
-For production setups, caching and delivery should be further optimized. Play is able to asset fingerprinting to 
-improve caching and deliver gzipped assets, if the browser supports that. To enable this, an SBT-Web pipeline is used.
+For production setups, caching and delivery should be further optimized. Play can "fingerprint" (hash) assets to 
+improve caching and deliver gzipped assets, if the browser supports that. To enable it, an SBT-Web pipeline is used.
 
 Add the following SBT plugins to `project/plugins.sbt`:
 
@@ -405,11 +408,11 @@ lazy val webapp = (project in file("webapp")).
 
 The improvements above configure play for the following asset delivery behavior:
 
-* In prod-mode, Play will automatically pick the minified version of an asset by its filename (e.g. `main.min.js` will 
-  be delivered instead of `main.js`)
+* In prod-mode, Play will automatically pick the minified version of an asset by its filename. E.g. 
+  `main.min.js` will be delivered instead of `main.js` if it exists.
 * An asset fingerprint (hash) will be added to the filename (e.g. `main.min.js` will become 
   `2ea61a7c328152d9a7e01e76db3e8b81-main.min.js`). The hash changes when the file is changed.
-* Because of the fingerprinting, play will server the assets with aggressive caching instructions to a browser
+* Because of the fingerprinting, play will serve the assets with aggressive caching instructions to a browser
 * If the browser allows gzip compression, a gzipped variant of the asset will be delivered
 
 This is a production HTTP request / response delivering `main.min.js` with fully optimized asset and caching:
