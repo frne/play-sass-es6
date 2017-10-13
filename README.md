@@ -349,4 +349,119 @@ recompile assets when they are changed. The latter is very convenient for develo
 
 The `gulp-clean` task removed generated files from dist directory.
 
-**Not yet finished...**
+Play Application Setup
+----------------------
+
+Play already delivers the JS/CSS files, if they are included in a template:
+
+```html
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        @* Here's where we render the page title `String`. *@
+        <title>@title</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("managed/css/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+
+    </head>
+    <body>
+        @content
+
+      <script src="@routes.Assets.versioned("managed/js/main.js")" type="text/javascript"></script>
+    </body>
+</html>
+```
+
+For production setups, caching and delivery should be further optimized. Play is able to asset fingerprinting to 
+improve caching and deliver gzipped assets, if the browser supports that. To enable this, an SBT-Web pipeline is used.
+
+Add the following SBT plugins to `project/plugins.sbt`:
+
+```scala
+addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
+```
+
+In `build.sbt`, the asset pipeline stages must be defined:
+
+```scala
+// webapp module definition (Play Framework)
+lazy val webapp = (project in file("webapp")).
+  settings(
+    commonSettings,
+    pipelineStages := Seq(digest, gzip), // add digest (fingerprinting) and gzip compression
+    libraryDependencies ++= Seq(
+      guice,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+    )
+  ).
+  enablePlugins(PlayScala)
+```
+
+*Note: These features only show full effect when play runs in prod mode (`sbt stage` or `sbt dist`)*
+
+The improvements above configure play for the following asset delivery behavior:
+
+* In prod-mode, Play will automatically pick the minified version of an asset by its filename (e.g. `main.min.js` will 
+  be delivered instead of `main.js`)
+* An asset fingerprint (hash) will be added to the filename (e.g. `main.min.js` will become 
+  `2ea61a7c328152d9a7e01e76db3e8b81-main.min.js`). The hash changes when the file is changed.
+* Because of the fingerprinting, play will server the assets with aggressive caching instructions to a browser
+* If the browser allows gzip compression, a gzipped variant of the asset will be delivered
+
+This is a production HTTP request / response delivering `main.min.js` with fully optimized asset and caching:
+
+``` text
+GET /assets/managed/js/2ea61a7c328152d9a7e01e76db3e8b81-main.min.js HTTP/1.1
+Host: localhost:9000
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36
+Accept: */*
+Referer: http://localhost:9000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.8,de;q=0.6
+```
+
+```text
+HTTP/1.1 200 OK
+ETag: "2ea61a7c328152d9a7e01e76db3e8b81"
+Vary: Accept-Encoding
+Accept-Ranges: bytes
+Cache-Control: public, max-age=31536000, immutable
+Last-Modified: Fri, 13 Oct 2017 10:34:12 GMT
+Referrer-Policy: origin-when-cross-origin, strict-origin-when-cross-origin
+X-Frame-Options: DENY
+Content-Encoding: gzip
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Content-Security-Policy: default-src 'self'
+X-Permitted-Cross-Domain-Policies: master-only
+Date: Fri, 13 Oct 2017 14:49:45 GMT
+Content-Type: application/javascript; charset=UTF-8
+Content-Length: 49756
+```
+
+Misc
+----
+
+If you finds bugs or have improvements, feel free to open a pull request.
+
+### License
+
+Copyright 2017 Frank Neff
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit 
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the 
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

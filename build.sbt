@@ -19,6 +19,7 @@ lazy val playScssEs6 = (project in file(".")).
 lazy val webapp = (project in file("webapp")).
   settings(
     commonSettings,
+    pipelineStages := Seq(digest, gzip),
     libraryDependencies ++= Seq(
       guice,
       "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
