@@ -3,7 +3,7 @@ import sbt.Keys._
 // settings for all modules
 val commonSettings = Seq(
   organization := "io.github.frne",
-  version := "1.0-SNAPSHOT",
+  version := "1.0.0",
   scalaVersion := "2.12.3"
 )
 
